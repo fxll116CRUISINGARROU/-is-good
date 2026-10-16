@@ -22,7 +22,18 @@ st.markdown("""
 @st.cache_data
 def load_data():
     """CSV 파일 로드 및 데이터 정제"""
-    file_path = Path("부산광역시_시내버스 업체별 연도별 버스 등록대수_20260330.csv")
+    import os
+
+    # 현재 스크립트가 있는 디렉토리
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, "부산광역시_시내버스 업체별 연도별 버스 등록대수_20260330.csv")
+
+    # 파일이 없으면 대안 경로 시도
+    if not os.path.exists(file_path):
+        alt_path = os.path.join(os.path.expanduser("~"), "OneDrive", "사진", "바탕 화면", "에이아이파이썬랩", "부산광역시_시내버스 업체별 연도별 버스 등록대수_20260330.csv")
+        if os.path.exists(alt_path):
+            file_path = alt_path
+
     df = pd.read_csv(file_path, encoding='cp949')
     df.columns = ['회사명', '노선번호', '버스ID', '타입1', '타입2', '타입3', '연료', '연도']
     return df
